@@ -1,7 +1,9 @@
 import { HasHtmlFormat } from "../interfaces/HasHtmlFormat.js";
+import { HasPrint } from "../interfaces/HasPrint";
 import { HasRender } from "../interfaces/HasRender.js";
 import { Datas } from "./Datas.js";
 import { Display } from "./Display.js";
+import { Print } from "./Print.js";
 
 export class FormInput {
   form: HTMLFormElement;
@@ -43,12 +45,25 @@ export class FormInput {
 
     // Listener
     this.submitFormListener();
+    this.printListener(this.btnPrint, this.docContainer);
   }
 
   // Listners
   private submitFormListener(): void {
     this.form.addEventListener("submit", this.handleFormSubmit.bind(this));
   }
+
+  private printListener(
+    btn: HTMLButtonElement,
+    docContainer: HTMLDivElement
+  ): void {
+    btn.addEventListener("click", () => {
+      let availableDoc : HasPrint = new Print(docContainer);
+      availableDoc.print();
+    });
+  }
+
+  // Handle
 
   private handleFormSubmit(e: Event) {
     e.preventDefault();
@@ -57,7 +72,11 @@ export class FormInput {
       let date: Date = new Date();
       let docData: HasHtmlFormat = new Datas(...inputs, date);
 
-      let template: HasRender = new Display(this.docContainer, this.hiddenDiv, this.btnPrint);
+      let template: HasRender = new Display(
+        this.docContainer,
+        this.hiddenDiv,
+        this.btnPrint
+      );
       let [type] = inputs;
       template.render(docData, type);
     }
