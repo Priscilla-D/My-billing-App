@@ -16,6 +16,7 @@ export class FormInput {
         this.tva = document.getElementById("tva");
         this.docContainer = document.getElementById("document-container");
         this.hiddenDiv = document.getElementById("hiddenDiv");
+        this.btnPrint = document.getElementById("print");
         // Listener
         this.submitFormListener();
     }
@@ -29,7 +30,7 @@ export class FormInput {
         if (Array.isArray(inputs)) {
             let date = new Date();
             let docData = new Datas(...inputs, date);
-            let template = new Display(this.docContainer, this.hiddenDiv);
+            let template = new Display(this.docContainer, this.hiddenDiv, this.btnPrint);
             let [type] = inputs;
             template.render(docData, type);
         }

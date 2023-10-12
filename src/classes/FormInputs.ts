@@ -18,6 +18,7 @@ export class FormInput {
   tva: HTMLInputElement;
   docContainer: HTMLDivElement;
   hiddenDiv: HTMLDivElement;
+  btnPrint: HTMLButtonElement;
 
   constructor() {
     this.form = document.getElementById("form") as HTMLFormElement;
@@ -38,6 +39,8 @@ export class FormInput {
     ) as HTMLDivElement;
     this.hiddenDiv = document.getElementById("hiddenDiv") as HTMLDivElement;
 
+    this.btnPrint = document.getElementById("print") as HTMLButtonElement;
+
     // Listener
     this.submitFormListener();
   }
@@ -53,9 +56,9 @@ export class FormInput {
     if (Array.isArray(inputs)) {
       let date: Date = new Date();
       let docData: HasHtmlFormat = new Datas(...inputs, date);
-      
-      let template: HasRender = new Display(this.docContainer, this.hiddenDiv);
-      let [ type ] = inputs;
+
+      let template: HasRender = new Display(this.docContainer, this.hiddenDiv, this.btnPrint);
+      let [type] = inputs;
       template.render(docData, type);
     }
   }

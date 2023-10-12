@@ -6,7 +6,8 @@ export class Display implements HasRender {
 
   constructor(
     private container: HTMLDivElement,
-    private hiddenDiv: HTMLDivElement
+    private hiddenDiv: HTMLDivElement,
+    private btnPrint: HTMLButtonElement
   ) {
     this.formContainer = document.getElementById(
       "form-container"
@@ -15,6 +16,11 @@ export class Display implements HasRender {
   render(docObj: HasHtmlFormat, docType: string) {
     const htmlString: string = docObj.htmlFormat();
     this.container.innerHTML = htmlString;
+    if (docType === "invoice") {
+      this.btnPrint.innerHTML = "Imprimer la facture";
+    } else {
+      this.btnPrint.innerHTML = "Imprimer le devis";
+    }
     this.hiddenDiv.classList.remove("invisible");
     this.formContainer.innerHTML = "";
   }
