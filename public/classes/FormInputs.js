@@ -1,4 +1,5 @@
 import { Datas } from "./Datas.js";
+import { Display } from "./Display.js";
 export class FormInput {
     constructor() {
         this.form = document.getElementById("form");
@@ -13,6 +14,8 @@ export class FormInput {
         this.price = document.getElementById("price");
         this.quantity = document.getElementById("quantity");
         this.tva = document.getElementById("tva");
+        this.docContainer = document.getElementById("document-container");
+        this.hiddenDiv = document.getElementById("hiddenDiv");
         // Listener
         this.submitFormListener();
     }
@@ -26,7 +29,9 @@ export class FormInput {
         if (Array.isArray(inputs)) {
             let date = new Date();
             let docData = new Datas(...inputs, date);
-            console.log(docData.htmlFormat());
+            let template = new Display(this.docContainer, this.hiddenDiv);
+            let [type] = inputs;
+            template.render(docData, type);
         }
     }
     inputDatas() {

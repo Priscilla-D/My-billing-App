@@ -1,5 +1,7 @@
 import { HasHtmlFormat } from "../interfaces/HasHtmlFormat.js";
+import { HasRender } from "../interfaces/HasRender.js";
 import { Datas } from "./Datas.js";
+import { Display } from "./Display.js";
 
 export class FormInput {
   form: HTMLFormElement;
@@ -14,6 +16,8 @@ export class FormInput {
   price: HTMLInputElement;
   quantity: HTMLInputElement;
   tva: HTMLInputElement;
+  docContainer: HTMLDivElement;
+  hiddenDiv: HTMLDivElement;
 
   constructor() {
     this.form = document.getElementById("form") as HTMLFormElement;
@@ -28,6 +32,11 @@ export class FormInput {
     this.price = document.getElementById("price") as HTMLInputElement;
     this.quantity = document.getElementById("quantity") as HTMLInputElement;
     this.tva = document.getElementById("tva") as HTMLInputElement;
+
+    this.docContainer = document.getElementById(
+      "document-container"
+    ) as HTMLDivElement;
+    this.hiddenDiv = document.getElementById("hiddenDiv") as HTMLDivElement;
 
     // Listener
     this.submitFormListener();
@@ -44,8 +53,10 @@ export class FormInput {
     if (Array.isArray(inputs)) {
       let date: Date = new Date();
       let docData: HasHtmlFormat = new Datas(...inputs, date);
-
-      console.log(docData.htmlFormat());
+      
+      let template: HasRender = new Display(this.docContainer, this.hiddenDiv);
+      let [ type ] = inputs;
+      template.render(docData, type);
     }
   }
 
