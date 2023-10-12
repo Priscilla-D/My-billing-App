@@ -44,6 +44,8 @@ export class FormInput {
     if (Array.isArray(inputs)) {
       let date: Date = new Date();
       let docData: HasHtmlFormat = new Datas(...inputs, date);
+
+      console.log(docData.htmlFormat());
     }
   }
 

@@ -26,6 +26,7 @@ export class FormInput {
         if (Array.isArray(inputs)) {
             let date = new Date();
             let docData = new Datas(...inputs, date);
+            console.log(docData.htmlFormat());
         }
     }
     inputDatas() {
