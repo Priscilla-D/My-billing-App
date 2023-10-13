@@ -8,9 +8,10 @@ export class Display {
     }
     render(docObj, docType) {
         const htmlString = docObj.htmlFormat();
+        this.container.classList.add("p-4");
         this.container.innerHTML = htmlString;
         // Local storage
-        const storage = new Storage(docType, htmlString);
+        new Storage(docType, htmlString);
         // Display
         if (docType === "invoice") {
             this.btnPrint.innerHTML = "Imprimer la facture";

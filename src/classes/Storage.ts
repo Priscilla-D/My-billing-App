@@ -1,4 +1,4 @@
-import { HasSetItem } from "../interfaces/HasSetItem.js";
+import { HasSetItem } from "../interfaces/Types.js";
 
 export class Storage implements HasSetItem {
   oldData: string[] = [];

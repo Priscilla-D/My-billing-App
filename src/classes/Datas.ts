@@ -1,4 +1,4 @@
-import { HasHtmlFormat } from "../interfaces/HasHtmlFormat.js";
+import { HasHtmlFormat } from "../interfaces/Types.js";
 
 export class Datas implements HasHtmlFormat {
   constructor(
@@ -39,7 +39,7 @@ export class Datas implements HasHtmlFormat {
         <h2 class="text-left">LOGO</h2>
     </div>
     <div class="col-md-6 text-right">
-        <p class="font-weight-bold mb-1">${docName} N° <span class="font-weight-normal">${docNumber}</span></p>
+        <p class="font-weight-bold mb-1">${docName} <span class="font-weight-normal">${docNumber}</span></p>
         <p class="font-weight-bold mb-1">Date <span class="font-weight-normal">${this.date.toLocaleDateString()}</span></p>
     </div>
 </div>

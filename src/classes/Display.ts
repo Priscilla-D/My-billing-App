@@ -1,6 +1,4 @@
-import { HasHtmlFormat } from "../interfaces/HasHtmlFormat.js";
-import { HasRender } from "../interfaces/HasRender.js";
-import { HasSetItem } from "../interfaces/HasSetItem.js";
+import { HasHtmlFormat, HasRender } from "../interfaces/Types.js";
 import { Storage } from "./Storage.js";
 
 export class Display implements HasRender {
@@ -17,12 +15,11 @@ export class Display implements HasRender {
   }
   render(docObj: HasHtmlFormat, docType: string) {
     const htmlString: string = docObj.htmlFormat();
+    this.container.classList.add("p-4");
     this.container.innerHTML = htmlString;
 
-
     // Local storage
-    const storage: HasSetItem = new Storage(docType, htmlString);
-
+    new Storage(docType, htmlString);
 
     // Display
     if (docType === "invoice") {

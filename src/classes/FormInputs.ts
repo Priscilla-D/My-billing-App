@@ -1,9 +1,7 @@
-import { HasHtmlFormat } from "../interfaces/HasHtmlFormat.js";
-import { HasPrint } from "../interfaces/HasPrint";
-import { HasRender } from "../interfaces/HasRender.js";
 import { Datas } from "./Datas.js";
 import { Display } from "./Display.js";
 import { Print } from "./Print.js";
+import { HasHtmlFormat, HasPrint, HasRender } from "../interfaces/Types.js";
 
 export class FormInput {
   form: HTMLFormElement;
@@ -27,6 +25,7 @@ export class FormInput {
   btnEstimates: HTMLButtonElement;
 
   constructor() {
+    // Form elements
     this.form = document.getElementById("form") as HTMLFormElement;
     this.type = document.getElementById("type") as HTMLSelectElement;
     this.firstName = document.getElementById("firstName") as HTMLInputElement;
@@ -40,6 +39,7 @@ export class FormInput {
     this.quantity = document.getElementById("quantity") as HTMLInputElement;
     this.tva = document.getElementById("tva") as HTMLInputElement;
 
+    // Div elements
     this.docContainer = document.getElementById(
       "document-container"
     ) as HTMLDivElement;
@@ -48,6 +48,7 @@ export class FormInput {
       "stored-data"
     ) as HTMLDivElement;
 
+    // Buttons
     this.btnPrint = document.getElementById("print") as HTMLButtonElement;
     this.btnReload = document.getElementById("reload") as HTMLButtonElement;
     this.btnInvoices = document.getElementById(
@@ -86,67 +87,7 @@ export class FormInput {
     });
   }
 
-  private getStoredDocs(
-    btnInvoices: HTMLButtonElement,
-    btnEstimates: HTMLButtonElement
-  ): void {
-    btnInvoices.addEventListener(
-      "click",
-      this.getItems.bind(this, this.type.value)
-    );
-    btnEstimates.addEventListener(
-      "click",
-      this.getItems.bind(this, this.type.value)
-    );
-  }
-
-  private getItems(doctype: string) {
-    if (this.storedDatasDiv.hasChildNodes()) {
-      this.storedDatasDiv.innerHTML = "";
-    }
-    if (localStorage.getItem(doctype)) {
-      let array: string | null = localStorage.getItem(doctype);
-
-      if (array !== null && array.length > 2) {
-        let arrayDatas: string[] = JSON.parse(array);
-        arrayDatas.map((doc: string): void => {
-          let card: HTMLDivElement = document.createElement("div");
-          let cardBody: HTMLDivElement = document.createElement("div");
-          let cardClasses: string[] = ["card", "mt-5"];
-          let cardBodyClasses: string = "card-body";
-          card.classList.add(...cardClasses);
-          cardBody.classList.add(cardBodyClasses);
-
-          cardBody.innerHTML = doc;
-          card.append(cardBody);
-          this.storedDatasDiv.append(card);
-        });
-      } else {
-        this.storedDatasDiv.innerHTML =
-          '<div class="p-5 font-italic text-secondary"> Pas de document.</div>';
-      }
-    }
-  }
-
-  // Handle
-
-  private handleFormSubmit(e: Event) {
-    e.preventDefault();
-    const inputs = this.inputDatas(); // Array ou undefined
-    if (Array.isArray(inputs)) {
-      let date: Date = new Date();
-      let docData: HasHtmlFormat = new Datas(...inputs, date);
-
-      let template: HasRender = new Display(
-        this.docContainer,
-        this.hiddenDiv,
-        this.btnPrint
-      );
-      let [type] = inputs;
-      template.render(docData, type);
-    }
-  }
-
+  // Get informations
   private inputDatas():
     | [
         string,
@@ -191,5 +132,65 @@ export class FormInput {
     }
     alert("Les valeurs numériques doivent être supérieures à 0.");
     return;
+  }
+
+  private getStoredDocs(
+    btnInvoices: HTMLButtonElement,
+    btnEstimates: HTMLButtonElement
+  ): void {
+    btnInvoices.addEventListener(
+      "click",
+      this.getItems.bind(this, this.type.value)
+    );
+    btnEstimates.addEventListener(
+      "click",
+      this.getItems.bind(this, this.type.value)
+    );
+  }
+
+  private getItems(doctype: string) {
+    if (this.storedDatasDiv.hasChildNodes()) {
+      this.storedDatasDiv.innerHTML = "";
+    }
+    if (localStorage.getItem(doctype)) {
+      let array: string | null = localStorage.getItem(doctype);
+
+      if (array !== null && array.length > 2) {
+        let arrayDatas: string[] = JSON.parse(array);
+        arrayDatas.map((doc: string): void => {
+          let card: HTMLDivElement = document.createElement("div");
+          let cardBody: HTMLDivElement = document.createElement("div");
+          let cardClasses: string[] = ["card", "mt-5"];
+          let cardBodyClasses: string = "card-body";
+          card.classList.add(...cardClasses);
+          cardBody.classList.add(cardBodyClasses);
+
+          cardBody.innerHTML = doc;
+          card.append(cardBody);
+          this.storedDatasDiv.append(card);
+        });
+      } else {
+        this.storedDatasDiv.innerHTML =
+          '<div class="card mt-5 p-5 font-italic text-secondary"> Pas de document.</div>';
+      }
+    }
+  }
+
+  // Handle
+  private handleFormSubmit(e: Event) {
+    e.preventDefault();
+    const inputs = this.inputDatas(); // Array ou undefined
+    if (Array.isArray(inputs)) {
+      let date: Date = new Date();
+      let docData: HasHtmlFormat = new Datas(...inputs, date);
+
+      let template: HasRender = new Display(
+        this.docContainer,
+        this.hiddenDiv,
+        this.btnPrint
+      );
+      let [type] = inputs;
+      template.render(docData, type);
+    }
   }
 }
