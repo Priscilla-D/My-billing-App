@@ -20,8 +20,11 @@ export class FormInput {
   tva: HTMLInputElement;
   docContainer: HTMLDivElement;
   hiddenDiv: HTMLDivElement;
+  storedDatasDiv: HTMLDivElement;
   btnPrint: HTMLButtonElement;
   btnReload: HTMLButtonElement;
+  btnInvoices: HTMLButtonElement;
+  btnEstimates: HTMLButtonElement;
 
   constructor() {
     this.form = document.getElementById("form") as HTMLFormElement;
@@ -41,14 +44,24 @@ export class FormInput {
       "document-container"
     ) as HTMLDivElement;
     this.hiddenDiv = document.getElementById("hiddenDiv") as HTMLDivElement;
+    this.storedDatasDiv = document.getElementById(
+      "stored-data"
+    ) as HTMLDivElement;
 
     this.btnPrint = document.getElementById("print") as HTMLButtonElement;
     this.btnReload = document.getElementById("reload") as HTMLButtonElement;
+    this.btnInvoices = document.getElementById(
+      "stored-invoices"
+    ) as HTMLButtonElement;
+    this.btnEstimates = document.getElementById(
+      "stored-estimates"
+    ) as HTMLButtonElement;
 
     // Listener
     this.submitFormListener();
     this.printListener(this.btnPrint, this.docContainer);
     this.deleteListener(this.btnReload);
+    this.getStoredDocs(this.btnInvoices, this.btnEstimates);
   }
 
   // Listners
@@ -71,6 +84,48 @@ export class FormInput {
       document.location.reload();
       window.scrollTo(0, 0);
     });
+  }
+
+  private getStoredDocs(
+    btnInvoices: HTMLButtonElement,
+    btnEstimates: HTMLButtonElement
+  ): void {
+    btnInvoices.addEventListener(
+      "click",
+      this.getItems.bind(this, this.type.value)
+    );
+    btnEstimates.addEventListener(
+      "click",
+      this.getItems.bind(this, this.type.value)
+    );
+  }
+
+  private getItems(doctype: string) {
+    if (this.storedDatasDiv.hasChildNodes()) {
+      this.storedDatasDiv.innerHTML = "";
+    }
+    if (localStorage.getItem(doctype)) {
+      let array: string | null = localStorage.getItem(doctype);
+
+      if (array !== null && array.length > 2) {
+        let arrayDatas: string[] = JSON.parse(array);
+        arrayDatas.map((doc: string): void => {
+          let card: HTMLDivElement = document.createElement("div");
+          let cardBody: HTMLDivElement = document.createElement("div");
+          let cardClasses: string[] = ["card", "mt-5"];
+          let cardBodyClasses: string = "card-body";
+          card.classList.add(...cardClasses);
+          cardBody.classList.add(cardBodyClasses);
+
+          cardBody.innerHTML = doc;
+          card.append(cardBody);
+          this.storedDatasDiv.append(card);
+        });
+      } else {
+        this.storedDatasDiv.innerHTML =
+          '<div class="p-5 font-italic text-secondary"> Pas de document.</div>';
+      }
+    }
   }
 
   // Handle
